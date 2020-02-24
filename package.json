@@ -12,6 +12,7 @@
   "files": [
     "dist"
   ],
+  "unpkg": true,
   "publishConfig": {
     "registry": "http://npm.dev.wixpress.com/"
   },
