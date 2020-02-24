@@ -1,0 +1,59 @@
+{
+  "name": "@wix/sync-ts",
+  "version": "1.0.0",
+  "license": "UNLICENSED",
+  "author": {
+    "name": "Ziv Pizanti",
+    "email": "zivp@wix.com"
+  },
+  "main": "dist/src/index.js",
+  "module": "dist/es/src/index.js",
+  "sideEffects": false,
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "registry": "http://npm.dev.wixpress.com/"
+  },
+  "scripts": {
+    "pretest": "yoshi build",
+    "test": "yoshi test",
+    "posttest": "yoshi lint",
+    "release": "yoshi release"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.js": "yoshi lint"
+  },
+  "devDependencies": {
+    "husky": "^4.2.1",
+    "lint-staged": "^10.0.7",
+    "yoshi": "^4.0.0"
+  },
+  "jest": {
+    "testPathIgnorePatterns": [
+      "<rootDir>/dist/",
+      "<rootDir>/node_modules/"
+    ]
+  },
+  "yoshi": {
+    "hmr": "auto"
+  },
+  "babel": {
+    "presets": [
+      [
+        "yoshi",
+        {
+          "ignoreReact": true
+        }
+      ]
+    ]
+  },
+  "eslintConfig": {
+    "extends": "yoshi-base"
+  }
+}
