@@ -16,6 +16,7 @@
   "publishConfig": {
     "registry": "http://npm.dev.wixpress.com/"
   },
+  "private": false,
   "scripts": {
     "pretest": "yoshi build",
     "test": "yoshi test",
@@ -56,5 +57,9 @@
   },
   "eslintConfig": {
     "extends": "yoshi-base"
+  },
+  "dependencies": {
+    "lodash": "^4.17.15",
+    "react-docgen": "^5.2.1"
   }
 }
