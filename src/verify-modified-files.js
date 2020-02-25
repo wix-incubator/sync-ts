@@ -1,38 +1,36 @@
-const shouldRequireTSChange = require(`./shouldRequireTSChange`);
+const didPropsChange = require(`./props-change-checker`);
 const _ = require(`lodash`);
 
 const getTypescriptDescriptorPath = fileRelativePath => {
-  //not dash
-  const lastDashIndex = fileRelativePath.lastIndexOf(`/`);
-  const fileFolderPath = fileRelativePath.substring(0, lastDashIndex + 1);
+  const lastSlashIndex = fileRelativePath.lastIndexOf(`/`);
+  const fileFolderPath = fileRelativePath.substring(0, lastSlashIndex + 1);
   return `${fileFolderPath}index.d.ts`;
 };
 
-//filesWithModifiedProps
-const filesToEnforceTSChange = modifiedFiles => {
-  const filesToEnforce = [];
+const getFilesWithModifiedProps = modifiedFiles => {
+  const filesWithModifiedProps = [];
   Object.keys(modifiedFiles).forEach(fileRelativePath => {
     const { contentFromSourceBranch, contentFromPr } = modifiedFiles[
       fileRelativePath
     ];
-    const { response, message } = shouldRequireTSChange(
+    const { didChange, changeMessage } = didPropsChange(
       contentFromSourceBranch,
       contentFromPr,
     );
-    if (response) {
-      filesToEnforce.push({
+    if (didChange) {
+      filesWithModifiedProps.push({
         fileRelativePath,
-        changeMessage: message,
+        changeMessage,
       });
     }
   });
 
-  return filesToEnforce;
+  return filesWithModifiedProps;
 };
 
 const getInvalidFiles = modifiedFiles => {
-  const filesToEnforce = filesToEnforceTSChange(modifiedFiles);
-  return _.filter(filesToEnforce, file => {
+  const filesWithModifiedProps = getFilesWithModifiedProps(modifiedFiles);
+  return _.filter(filesWithModifiedProps, file => {
     const typescriptDescriptorRelativePath = getTypescriptDescriptorPath(
       file.fileRelativePath,
     );
@@ -46,7 +44,6 @@ const verifyModifiedFiles = modifiedFiles => {
     return true;
   }
   invalidFilesList.forEach(invalidFile => {
-    // eslint-disable-next-line no-console
     console.error(
       `Changes detected in ${invalidFile.fileRelativePath} - ${invalidFile.changeMessage}. Please update relevant index.d.ts file and push again.`,
     );

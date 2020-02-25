@@ -32,7 +32,7 @@ const havePropTypesChanged = (sourceFileComponentData, prFileComponentData) => {
   return !_.isEqual(sourceComponentPropTypes, prComponentPropTypes);
 };
 
-const shouldRequireTsChange = (sourceFile, fileFromPr) => {
+const didPropsChange = (sourceFile, fileFromPr) => {
   const sourceFileComponents = getAllComponentsDataByDisplayName(
     sourceFile,
   );
@@ -87,4 +87,4 @@ const shouldRequireTsChange = (sourceFile, fileFromPr) => {
       };
 };
 
-module.exports = shouldRequireTsChange;
+module.exports = didPropsChange;

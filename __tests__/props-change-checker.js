@@ -1,10 +1,10 @@
-const shouldRequireTSChange = require('../src/should-require-ts-change');
-const shouldRequireDriver = require('../drivers/should-require-ts-change.driver');
+const didPropsChange = require('../src/props-change-checker');
+const fileContentMocks = require('../drivers/file-content-mocks');
 
-const { fileWithComponent, fileWithTwoComponents } = shouldRequireDriver
+const { fileWithComponent, fileWithTwoComponents } = fileContentMocks
 
-//More things to test - isRequired
-describe('shouldRequireTSChange', () => {
+//Verify tests, change titles and all
+describe('didPropsChange', () => {
   it('should require changes for props addition', () => {
     const firstFile = fileWithComponent({
       propTypes: `prop1: PropTypes.number,
@@ -15,7 +15,7 @@ describe('shouldRequireTSChange', () => {
         'prop1: PropTypes.number, prop2: PropTypes.string, prop3: PropTypes.object',
     });
 
-    expect(shouldRequireTSChange(firstFile, secondFile)).toMatchObject({
+    expect(didPropsChange(firstFile, secondFile)).toMatchObject({
       response: true,
       message: 'PropTypes were changed in DummyComponent component',
     });
@@ -30,7 +30,7 @@ describe('shouldRequireTSChange', () => {
       propTypes: 'prop2: PropTypes.string',
     });
 
-    expect(shouldRequireTSChange(firstFile, secondFile)).toMatchObject({
+    expect(didPropsChange(firstFile, secondFile)).toMatchObject({
       response: true,
       message: 'PropTypes were changed in DummyComponent component',
     });
@@ -44,7 +44,7 @@ describe('shouldRequireTSChange', () => {
        prop2: PropTypes.string`,
     });
 
-    expect(shouldRequireTSChange(firstFile, secondFile)).toMatchObject({
+    expect(didPropsChange(firstFile, secondFile)).toMatchObject({
       response: true,
       message: 'An exported component was added to, or removed from, the file',
     });
@@ -57,7 +57,7 @@ describe('shouldRequireTSChange', () => {
     });
     const secondFile = '';
 
-    expect(shouldRequireTSChange(firstFile, secondFile)).toMatchObject({
+    expect(didPropsChange(firstFile, secondFile)).toMatchObject({
       response: true,
       message: 'An exported component was added to, or removed from, the file',
     });
@@ -67,7 +67,7 @@ describe('shouldRequireTSChange', () => {
     const firstFile = fileWithComponent();
     const secondFile = fileWithComponent({ displayName: `'myNewComp'` });
 
-    expect(shouldRequireTSChange(firstFile, secondFile)).toMatchObject({
+    expect(didPropsChange(firstFile, secondFile)).toMatchObject({
       response: true,
       message: 'PropTypes were changed in myNewComp component',
     });
@@ -77,14 +77,14 @@ describe('shouldRequireTSChange', () => {
     const firstFile = 'const MY_CONST = 5';
     const secondFile = 'const MY_CONST = 6';
 
-    expect(shouldRequireTSChange(firstFile, secondFile)).toMatchObject({
+    expect(didPropsChange(firstFile, secondFile)).toMatchObject({
       response: false,
     });
   });
 
   it('should not require changes for unchanged file', () => {
     expect(
-      shouldRequireTSChange(fileWithComponent(), fileWithComponent()),
+      didPropsChange(fileWithComponent(), fileWithComponent()),
     ).toMatchObject({ response: false });
   });
 
@@ -98,7 +98,7 @@ describe('shouldRequireTSChange', () => {
       defaultPropValues: `prop1: 1`,
     });
 
-    expect(shouldRequireTSChange(firstFile, secondFile)).toMatchObject({
+    expect(didPropsChange(firstFile, secondFile)).toMatchObject({
       response: false,
     });
   });
@@ -108,7 +108,7 @@ describe('shouldRequireTSChange', () => {
       const firstFile = fileWithTwoComponents({firstCompPropTypes: 'prop1: PropTypes.string'})
       const secondFile = fileWithTwoComponents({firstCompPropTypes: 'prop1: PropTypes.string.isRequired'})
 
-      expect(shouldRequireTSChange(firstFile, secondFile)).toMatchObject({
+      expect(didPropsChange(firstFile, secondFile)).toMatchObject({
         response: true,
         message: 'PropTypes were changed in Comp1 component',
       });
@@ -118,7 +118,7 @@ describe('shouldRequireTSChange', () => {
       const firstFile = fileWithTwoComponents({secondCompPropTypes: 'myProp: PropTypes.string'})
       const secondFile = fileWithTwoComponents({secondCompPropTypes: 'myOtherProp: PropTypes.string'})
 
-      expect(shouldRequireTSChange(firstFile, secondFile)).toMatchObject({
+      expect(didPropsChange(firstFile, secondFile)).toMatchObject({
         response: true,
         message: 'PropTypes were changed in Comp2 component',
       });
