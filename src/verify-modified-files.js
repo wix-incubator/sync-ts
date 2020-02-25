@@ -2,19 +2,21 @@ const shouldRequireTSChange = require(`./shouldRequireTSChange`);
 const _ = require(`lodash`);
 
 const getTypescriptDescriptorPath = fileRelativePath => {
+  //not dash
   const lastDashIndex = fileRelativePath.lastIndexOf(`/`);
   const fileFolderPath = fileRelativePath.substring(0, lastDashIndex + 1);
   return `${fileFolderPath}index.d.ts`;
 };
 
+//filesWithModifiedProps
 const filesToEnforceTSChange = modifiedFiles => {
   const filesToEnforce = [];
   Object.keys(modifiedFiles).forEach(fileRelativePath => {
-    const { contentFromMaster, contentFromPr } = modifiedFiles[
+    const { contentFromSourceBranch, contentFromPr } = modifiedFiles[
       fileRelativePath
     ];
     const { response, message } = shouldRequireTSChange(
-      contentFromMaster,
+      contentFromSourceBranch,
       contentFromPr,
     );
     if (response) {
@@ -32,7 +34,7 @@ const getInvalidFiles = modifiedFiles => {
   const filesToEnforce = filesToEnforceTSChange(modifiedFiles);
   return _.filter(filesToEnforce, file => {
     const typescriptDescriptorRelativePath = getTypescriptDescriptorPath(
-      file.filePath,
+      file.fileRelativePath,
     );
     return !modifiedFiles[typescriptDescriptorRelativePath];
   });
@@ -40,10 +42,12 @@ const getInvalidFiles = modifiedFiles => {
 
 const verifyModifiedFiles = modifiedFiles => {
   const invalidFilesList = getInvalidFiles(modifiedFiles);
-  if (invalidFilesList.length === 0) return true;
+  if (!invalidFilesList.length) {
+    return true;
+  }
   invalidFilesList.forEach(invalidFile => {
     // eslint-disable-next-line no-console
-    console.log(
+    console.error(
       `Changes detected in ${invalidFile.fileRelativePath} - ${invalidFile.changeMessage}. Please update relevant index.d.ts file and push again.`,
     );
   });
