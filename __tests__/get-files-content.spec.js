@@ -21,14 +21,14 @@ describe('get files content function', () => {
       { relativePath: '/test-file.js', content: 'some content' },
     ];
 
-    expect(getFilesContent(mockFilePaths)).resolves.toEqual(expected);
+    await expect(getFilesContent(mockFilePaths)).resolves.toEqual(expected);
     expect(readFileSpy).toHaveBeenCalled();
   });
 
   it('should return empty array if no files exist', async () => {
     const expected = [];
 
-    expect(getFilesContent()).resolves.toEqual(expected);
+    await expect(getFilesContent()).resolves.toEqual(expected);
     expect(readFileSpy).not.toHaveBeenCalled();
   });
 });
