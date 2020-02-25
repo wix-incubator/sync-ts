@@ -35,9 +35,8 @@ const havePropTypesChanged = (sourceFileComponentData, prFileComponentData) => {
     sourceFileComponentData.props,
     props => _.pick(props, ['type', 'required']),
   );
-  const prComponentPropTypes = _.mapValues(
-    prFileComponentData.props,
-    props => _.pick(props, ['type', 'required']),
+  const prComponentPropTypes = _.mapValues(prFileComponentData.props, props =>
+    _.pick(props, ['type', 'required']),
   );
 
   return !_.isEqual(sourceComponentPropTypes, prComponentPropTypes);
