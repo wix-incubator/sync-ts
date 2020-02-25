@@ -1,6 +1,6 @@
 const _ = require(`lodash`);
 const didPropsChange = require(`./props-change-checker`);
-const { getMessage } = require('./messages');
+const messages = require('./messages');
 
 const getTypescriptDescriptorPath = fileRelativePath => {
   const lastSlashIndex = fileRelativePath.lastIndexOf(`/`);
@@ -10,6 +10,7 @@ const getTypescriptDescriptorPath = fileRelativePath => {
 
 const getFilesWithModifiedProps = modifiedFiles => {
   const filesWithModifiedProps = [];
+
   Object.keys(modifiedFiles).forEach(fileRelativePath => {
     const { contentFromSourceBranch, contentFromPr } = modifiedFiles[
       fileRelativePath
@@ -31,6 +32,7 @@ const getFilesWithModifiedProps = modifiedFiles => {
 
 const getInvalidFiles = modifiedFiles => {
   const filesWithModifiedProps = getFilesWithModifiedProps(modifiedFiles);
+
   return _.filter(filesWithModifiedProps, file => {
     const typescriptDescriptorRelativePath = getTypescriptDescriptorPath(
       file.fileRelativePath,
@@ -42,18 +44,19 @@ const getInvalidFiles = modifiedFiles => {
 const verifyModifiedFiles = modifiedFiles => {
   const invalidFilesList = getInvalidFiles(modifiedFiles);
   if (!invalidFilesList.length) {
-    return true;
+    return;
   }
 
   invalidFilesList.forEach(invalidFile => {
     console.error(
-      getMessage.fileChanged(
+      messages.fileChanged(
         invalidFile.fileRelativePath,
         invalidFile.changeMessage,
       ),
     );
   });
-  return false;
+
+  throw new Error(messages.verificationFailed());
 };
 
 module.exports = verifyModifiedFiles;

@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 const reactDocs = require('react-docgen');
 const _ = require('lodash');
-const getMessage = require('./messages');
+const messages = require('./messages');
 
 const compAddedToFile = (sourceFileComponents, prFileComponents) =>
   !sourceFileComponents && prFileComponents;
@@ -69,7 +69,7 @@ const invalidIndicesChangeMessage = (
   let changeMessage = '';
   invalidComponentIndices.forEach(
     index =>
-      (changeMessage += `${getMessage.propsChanged(
+      (changeMessage += `${messages.propsChanged(
         prFileComponents[index].displayName,
       )}\n`),
   );
@@ -84,13 +84,13 @@ const didPropsChange = (sourceFile, fileFromPr) => {
   if (compAddedToFile(sourceFileComponents, prFileComponents)) {
     return {
       changeDetected: true,
-      changeMessage: getMessage.compAdded(),
+      changeMessage: messages.compAdded(),
     };
   }
   if (compDeletedFromFile(sourceFileComponents, prFileComponents)) {
     return {
       changeDetected: true,
-      changeMessage: getMessage.compDeleted(),
+      changeMessage: messages.compDeleted(),
     };
   }
   if (noComponentsInFile(sourceFileComponents, prFileComponents)) {
@@ -101,8 +101,8 @@ const didPropsChange = (sourceFile, fileFromPr) => {
   if (differentNumberOfComponents(sourceFileComponents, prFileComponents)) {
     const changeMessage =
       sourceFileComponents.length < prFileComponents.length
-        ? getMessage.compAdded()
-        : getMessage.compDeleted();
+        ? messages.compAdded()
+        : messages.compDeleted();
     return {
       changeDetected: true,
       changeMessage,
