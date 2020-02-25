@@ -47,17 +47,13 @@ Comp1.propTypes = {
   ${firstCompPropTypes}
 };
 
-class Comp2 {
-  static propTypes = {
-    ${secondCompPropTypes}
-  };
+const Comp2 = ({}) => (
+  <div> 'Hey' </div>
+);
 
-  render() {
-    return (
-      <div> 'Hey2' </div>
-    );
-  }
-}
+Comp2.propTypes = {
+  ${secondCompPropTypes}
+};
 
 export {
   Comp1,

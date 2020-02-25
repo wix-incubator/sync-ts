@@ -1,6 +1,16 @@
 /* eslint-disable no-console */
 const reactDocs = require('react-docgen');
 const _ = require('lodash');
+const getMessage = require('./messages');
+
+const compAddedToFile = (sourceFileComponents, prFileComponents) =>
+  !sourceFileComponents && prFileComponents;
+const compDeletedFromFile = (sourceFileComponents, prFileComponents) =>
+  sourceFileComponents && !prFileComponents;
+const noComponentsInFile = (sourceFileComponents, prFileComponents) =>
+  !sourceFileComponents && !prFileComponents;
+const differentNumberOfComponents = (sourceFileComponents, prFileComponents) =>
+  sourceFileComponents.length !== prFileComponents.length;
 
 const getAllComponentsDataByDisplayName = file => {
   let result;
@@ -25,66 +35,94 @@ const havePropTypesChanged = (sourceFileComponentData, prFileComponentData) => {
     sourceFileComponentData.props,
     props => _.pick(props, ['type', 'required']),
   );
-  const prComponentPropTypes = _.mapValues(prFileComponentData.props, props =>
-    _.pick(props, ['type', 'required']),
+  const prComponentPropTypes = _.mapValues(
+    prFileComponentData.props,
+    props => _.pick(props, ['type', 'required']),
   );
 
   return !_.isEqual(sourceComponentPropTypes, prComponentPropTypes);
 };
 
-const didPropsChange = (sourceFile, fileFromPr) => {
-  const sourceFileComponents = getAllComponentsDataByDisplayName(
-    sourceFile,
+const getInvalidIndices = (prFileComponents, sourceFileComponents) => {
+  const invalidComponentIndices = [];
+
+  prFileComponents.forEach((prFileComponent, index) => {
+    const sourceFileComponent = sourceFileComponents[index];
+    if (
+      !_.isEqual(
+        sourceFileComponent.displayName,
+        prFileComponent.displayName,
+      ) ||
+      havePropTypesChanged(sourceFileComponent, prFileComponent)
+    ) {
+      invalidComponentIndices.push(index);
+    }
+  });
+
+  return invalidComponentIndices;
+};
+
+const invalidIndicesChangeMessage = (
+  prFileComponents,
+  invalidComponentIndices,
+) => {
+  let changeMessage = '';
+  invalidComponentIndices.forEach(
+    index =>
+      (changeMessage += `${getMessage.propsChanged(
+        prFileComponents[index].displayName,
+      )}\n`),
   );
+
+  return changeMessage.trim();
+};
+
+const didPropsChange = (sourceFile, fileFromPr) => {
+  const sourceFileComponents = getAllComponentsDataByDisplayName(sourceFile);
   const prFileComponents = getAllComponentsDataByDisplayName(fileFromPr);
 
-  if (
-    //comp created / comp deleted with relevant messages - in functions
-    (sourceFileComponents && !prFileComponents) ||
-    (!sourceFileComponents && prFileComponents)
-  ) {
+  if (compAddedToFile(sourceFileComponents, prFileComponents)) {
     return {
-      response: true,
-      //consts
-      message: 'An exported component was added to, or removed from, the file',
+      changeDetected: true,
+      changeMessage: getMessage.compAdded(),
     };
   }
-  if (!sourceFileComponents && !prFileComponents) {
+  if (compDeletedFromFile(sourceFileComponents, prFileComponents)) {
     return {
-      response: false,
+      changeDetected: true,
+      changeMessage: getMessage.compDeleted(),
     };
   }
-
-  if (sourceFileComponents.length !== prFileComponents.length) {
-    const message =
+  if (noComponentsInFile(sourceFileComponents, prFileComponents)) {
+    return {
+      changeDetected: false,
+    };
+  }
+  if (differentNumberOfComponents(sourceFileComponents, prFileComponents)) {
+    const changeMessage =
       sourceFileComponents.length < prFileComponents.length
-        ? 'An exported component was added to the file'
-        : 'An exported component was deleted from the file';
+        ? getMessage.compAdded()
+        : getMessage.compDeleted();
     return {
-      response: true,
-      message,
+      changeDetected: true,
+      changeMessage,
     };
   }
 
-  //get all bad indices
-  const invalidComponentIndex = prFileComponents.findIndex(
-    (prFileComponent, index) => {
-      const sourceFileComponent = sourceFileComponents[index];
-      if (
-        !_.isEqual(sourceFileComponent.displayName, prFileComponent.displayName)
-      ) {
-        return true;
-      }
-      return havePropTypesChanged(sourceFileComponent, prFileComponent);
-    },
+  const invalidComponentIndices = getInvalidIndices(
+    prFileComponents,
+    sourceFileComponents,
   );
 
-  return invalidComponentIndex < 0
-    ? { response: false }
-    : {
-        response: true,
-        message: `PropTypes were changed in ${prFileComponents[invalidComponentIndex].displayName} component`,
-      };
+  return invalidComponentIndices.length
+    ? {
+        changeDetected: true,
+        changeMessage: invalidIndicesChangeMessage(
+          prFileComponents,
+          invalidComponentIndices,
+        ),
+      }
+    : { changeDetected: false };
 };
 
 module.exports = didPropsChange;

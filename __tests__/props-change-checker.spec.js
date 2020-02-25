@@ -1,11 +1,10 @@
 const didPropsChange = require('../src/props-change-checker');
 const fileContentMocks = require('../drivers/file-content-mocks');
 
-const { fileWithComponent, fileWithTwoComponents } = fileContentMocks
+const { fileWithComponent, fileWithTwoComponents } = fileContentMocks;
 
-//Verify tests, change titles and all
 describe('didPropsChange', () => {
-  it('should require changes for props addition', () => {
+  it('should detect change for props addition', () => {
     const firstFile = fileWithComponent({
       propTypes: `prop1: PropTypes.number,
        prop2: PropTypes.string`,
@@ -16,12 +15,12 @@ describe('didPropsChange', () => {
     });
 
     expect(didPropsChange(firstFile, secondFile)).toMatchObject({
-      response: true,
-      message: 'PropTypes were changed in DummyComponent component',
+      changeDetected: true,
+      changeMessage: 'PropTypes were changed in DummyComponent component',
     });
   });
 
-  it('should require changes when removing props', () => {
+  it('should detect change when removing props', () => {
     const firstFile = fileWithComponent({
       propTypes: `prop1: PropTypes.number,
        prop2: PropTypes.string`,
@@ -31,12 +30,12 @@ describe('didPropsChange', () => {
     });
 
     expect(didPropsChange(firstFile, secondFile)).toMatchObject({
-      response: true,
-      message: 'PropTypes were changed in DummyComponent component',
+      changeDetected: true,
+      changeMessage: 'PropTypes were changed in DummyComponent component',
     });
   });
 
-  it('should require changes when adding a new file', () => {
+  it('should detect change when adding a new file', () => {
     const firstFile = '';
 
     const secondFile = fileWithComponent({
@@ -45,12 +44,12 @@ describe('didPropsChange', () => {
     });
 
     expect(didPropsChange(firstFile, secondFile)).toMatchObject({
-      response: true,
-      message: 'An exported component was added to, or removed from, the file',
+      changeDetected: true,
+      changeMessage: 'An exported component was added to the file',
     });
   });
 
-  it('should require changes when deleting a file', () => {
+  it('should detect change when deleting a file', () => {
     const firstFile = fileWithComponent({
       propTypes: `prop1: PropTypes.number,
        prop2: PropTypes.string`,
@@ -58,37 +57,37 @@ describe('didPropsChange', () => {
     const secondFile = '';
 
     expect(didPropsChange(firstFile, secondFile)).toMatchObject({
-      response: true,
-      message: 'An exported component was added to, or removed from, the file',
+      changeDetected: true,
+      changeMessage: 'An exported component was deleted from the file',
     });
   });
 
-  it('should require changes when changing the exported component display name', () => {
+  it('should detect change when changing the exported component display name', () => {
     const firstFile = fileWithComponent();
     const secondFile = fileWithComponent({ displayName: `'myNewComp'` });
 
     expect(didPropsChange(firstFile, secondFile)).toMatchObject({
-      response: true,
-      message: 'PropTypes were changed in myNewComp component',
+      changeDetected: true,
+      changeMessage: 'PropTypes were changed in myNewComp component',
     });
   });
 
-  it('should not require changes when providing a file with no components', () => {
+  it('should not detect change when providing a file with no components', () => {
     const firstFile = 'const MY_CONST = 5';
     const secondFile = 'const MY_CONST = 6';
 
     expect(didPropsChange(firstFile, secondFile)).toMatchObject({
-      response: false,
+      changeDetected: false,
     });
   });
 
-  it('should not require changes for unchanged file', () => {
+  it('should not detect change for unchanged file', () => {
     expect(
       didPropsChange(fileWithComponent(), fileWithComponent()),
-    ).toMatchObject({ response: false });
+    ).toMatchObject({ changeDetected: false });
   });
 
-  it('should not require changes for default props changes', () => {
+  it('should not detect change for default prop values changes', () => {
     const firstFile = fileWithComponent({
       propTypes: 'prop1: PropTypes.number',
       defaultPropValues: `prop1: 0`,
@@ -99,28 +98,36 @@ describe('didPropsChange', () => {
     });
 
     expect(didPropsChange(firstFile, secondFile)).toMatchObject({
-      response: false,
+      changeDetected: false,
     });
   });
 
   describe('file with two components', () => {
-    it('should require changes for prop changes in first file', () => {
-      const firstFile = fileWithTwoComponents({firstCompPropTypes: 'prop1: PropTypes.string'})
-      const secondFile = fileWithTwoComponents({firstCompPropTypes: 'prop1: PropTypes.string.isRequired'})
+    it('should detect change for prop changes in first file', () => {
+      const firstFile = fileWithTwoComponents({
+        firstCompPropTypes: 'prop1: PropTypes.string',
+      });
+      const secondFile = fileWithTwoComponents({
+        firstCompPropTypes: 'prop1: PropTypes.string.isRequired',
+      });
 
       expect(didPropsChange(firstFile, secondFile)).toMatchObject({
-        response: true,
-        message: 'PropTypes were changed in Comp1 component',
+        changeDetected: true,
+        changeMessage: 'PropTypes were changed in Comp1 component',
       });
     });
 
-    it('should require changes for prop changes in second file', () => {
-      const firstFile = fileWithTwoComponents({secondCompPropTypes: 'myProp: PropTypes.string'})
-      const secondFile = fileWithTwoComponents({secondCompPropTypes: 'myOtherProp: PropTypes.string'})
+    it('should detect change for prop changes in second file', () => {
+      const firstFile = fileWithTwoComponents({
+        secondCompPropTypes: 'myProp: PropTypes.string',
+      });
+      const secondFile = fileWithTwoComponents({
+        secondCompPropTypes: 'myOtherProp: PropTypes.string',
+      });
 
       expect(didPropsChange(firstFile, secondFile)).toMatchObject({
-        response: true,
-        message: 'PropTypes were changed in Comp2 component',
+        changeDetected: true,
+        changeMessage: 'PropTypes were changed in Comp2 component',
       });
     });
   });

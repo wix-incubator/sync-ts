@@ -1,5 +1,6 @@
-const didPropsChange = require(`./props-change-checker`);
 const _ = require(`lodash`);
+const didPropsChange = require(`./props-change-checker`);
+const { getMessage } = require('./messages');
 
 const getTypescriptDescriptorPath = fileRelativePath => {
   const lastSlashIndex = fileRelativePath.lastIndexOf(`/`);
@@ -13,11 +14,11 @@ const getFilesWithModifiedProps = modifiedFiles => {
     const { contentFromSourceBranch, contentFromPr } = modifiedFiles[
       fileRelativePath
     ];
-    const { didChange, changeMessage } = didPropsChange(
+    const { changeDetected, changeMessage } = didPropsChange(
       contentFromSourceBranch,
       contentFromPr,
     );
-    if (didChange) {
+    if (changeDetected) {
       filesWithModifiedProps.push({
         fileRelativePath,
         changeMessage,
@@ -43,9 +44,13 @@ const verifyModifiedFiles = modifiedFiles => {
   if (!invalidFilesList.length) {
     return true;
   }
+
   invalidFilesList.forEach(invalidFile => {
     console.error(
-      `Changes detected in ${invalidFile.fileRelativePath} - ${invalidFile.changeMessage}. Please update relevant index.d.ts file and push again.`,
+      getMessage.fileChanged(
+        invalidFile.fileRelativePath,
+        invalidFile.changeMessage,
+      ),
     );
   });
   return false;
