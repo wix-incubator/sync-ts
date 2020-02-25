@@ -3,7 +3,8 @@ import getFilesContent from '../src/get-modified-files/get-files-content';
 
 describe('get files content function', () => {
   let readFileSpy;
-  const mockReadFile = (url, encoding, cb) => cb(null, mockFileContent);
+  const mockReadFile = (url, encoding, cb) =>
+    setTimeout(() => cb(null, mockFileContent));
   const mockFilePaths = ['/test-file.js'];
   const mockFileContent = 'some content';
 
