@@ -16,7 +16,7 @@ describe('get files content function', () => {
     readFileSpy.mockClear();
   });
 
-  it('should get paths for modified files', async () => {
+  it('should get paths for modified files', async done => {
     const filePaths = await getFilesContent(mockFilePaths);
     const expected = [
       { relativePath: '/test-file.js', content: 'some content' },
@@ -25,14 +25,16 @@ describe('get files content function', () => {
     expect(readFileSpy).toHaveBeenCalled();
     expect(filePaths.length).toBe(1);
     expect(filePaths).toEqual(expected);
+    done();
   });
 
-  it('should return empty array if no files exist', async () => {
+  it('should return empty array if no files exist', async done => {
     const filePaths = await getFilesContent();
     const expected = [];
 
     expect(readFileSpy).not.toHaveBeenCalled();
     expect(filePaths.length).toBe(0);
     expect(filePaths).toEqual(expected);
+    done();
   });
 });
