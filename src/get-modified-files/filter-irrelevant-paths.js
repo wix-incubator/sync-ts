@@ -16,10 +16,12 @@ const getTypescriptDescriptorPath = fileRelativePath => {
 };
 
 const filterIrrelevantPaths = filePaths => {
-  return filePaths
-    .filter(startsWithSrc)
-    .filter(validFileExtension)
-    .filter(hasNoTypescriptDescriptor(filePaths));
+  return (
+    filePaths
+      .filter(startsWithSrc)
+      // .filter(validFileExtension)
+      .filter(hasNoTypescriptDescriptor(filePaths))
+  );
 };
 
 module.exports = filterIrrelevantPaths;
