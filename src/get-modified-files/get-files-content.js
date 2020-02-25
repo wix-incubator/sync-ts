@@ -14,7 +14,6 @@ async function getFileContent(filePath) {
   return new Promise(async resolve => {
     const gitRootPath = await getGitRootPath();
     fs.readFile(`${gitRootPath}/${filePath}`, 'utf8', (err, data) => {
-      // TODO: go to nearest folder that contains .git
       if (!err) {
         resolve(data);
       } else {
