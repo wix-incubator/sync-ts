@@ -1,15 +1,17 @@
 const getModifiedFilePaths = require('./get-modified-file-paths');
+const filterIrrelevantPaths = require('./filter-irrelevant-paths');
 const getFilesContent = require('./get-files-content');
-const switchToSrouceBranch = require('./switch-to-source-branch');
+const switchToSourceBranch = require('./switch-to-source-branch');
 const resolveFiles = require('./resolve-files');
 
 async function getModifiedFiles(sourceBranch = 'master') {
   return new Promise(async (resolve, reject) => {
-    const filePaths = await getModifiedFilePaths(sourceBranch);
+    const rawFilePaths = await getModifiedFilePaths(sourceBranch);
+    const filePaths = filterIrrelevantPaths(rawFilePaths);
     const filesFromPr = await getFilesContent(filePaths);
 
-    const isSwitchSuccessfull = await switchToSrouceBranch(sourceBranch);
-    if (isSwitchSuccessfull) {
+    const isSwitchSuccessful = await switchToSourceBranch(sourceBranch);
+    if (isSwitchSuccessful) {
       const filesFromSourceBranch = await getFilesContent(filePaths);
       const files = await resolveFiles(filesFromPr, filesFromSourceBranch);
       resolve(files);

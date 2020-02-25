@@ -1,7 +1,6 @@
-/* eslint-disable no-console */
-const reactDocs = require('react-docgen');
-const _ = require('lodash');
 const messages = require('./messages');
+const getAllComponentsDataByDisplayName = require('./get-all-components-data');
+const getInvalidIndices = require('./get-invalid-indices');
 
 const compAddedToFile = (sourceFileComponents, prFileComponents) =>
   !sourceFileComponents && prFileComponents;
@@ -11,55 +10,6 @@ const noComponentsInFile = (sourceFileComponents, prFileComponents) =>
   !sourceFileComponents && !prFileComponents;
 const differentNumberOfComponents = (sourceFileComponents, prFileComponents) =>
   sourceFileComponents.length !== prFileComponents.length;
-
-const getAllComponentsDataByDisplayName = file => {
-  let result;
-  try {
-    result = _.sortBy(
-      reactDocs.parse(
-        file,
-        reactDocs.resolver.findAllExportedComponentDefinitions,
-        undefined,
-        { filename: '' },
-      ),
-      ['displayName'],
-    );
-  } catch {
-    result = undefined;
-  }
-  return result;
-};
-
-const havePropTypesChanged = (sourceFileComponentData, prFileComponentData) => {
-  const sourceComponentPropTypes = _.mapValues(
-    sourceFileComponentData.props,
-    props => _.pick(props, ['type', 'required']),
-  );
-  const prComponentPropTypes = _.mapValues(prFileComponentData.props, props =>
-    _.pick(props, ['type', 'required']),
-  );
-
-  return !_.isEqual(sourceComponentPropTypes, prComponentPropTypes);
-};
-
-const getInvalidIndices = (prFileComponents, sourceFileComponents) => {
-  const invalidComponentIndices = [];
-
-  prFileComponents.forEach((prFileComponent, index) => {
-    const sourceFileComponent = sourceFileComponents[index];
-    if (
-      !_.isEqual(
-        sourceFileComponent.displayName,
-        prFileComponent.displayName,
-      ) ||
-      havePropTypesChanged(sourceFileComponent, prFileComponent)
-    ) {
-      invalidComponentIndices.push(index);
-    }
-  });
-
-  return invalidComponentIndices;
-};
 
 const invalidIndicesChangeMessage = (
   prFileComponents,

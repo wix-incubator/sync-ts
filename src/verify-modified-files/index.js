@@ -1,5 +1,5 @@
 const _ = require(`lodash`);
-const didPropsChange = require(`./props-change-checker`);
+const didPropsChange = require(`./src/verify-modified-files/props-change-checker`);
 const messages = require('./messages');
 
 const getTypescriptDescriptorPath = fileRelativePath => {
@@ -41,7 +41,7 @@ const getInvalidFiles = modifiedFiles => {
   });
 };
 
-const verifyModifiedFiles = modifiedFiles => {
+const index = modifiedFiles => {
   const invalidFilesList = getInvalidFiles(modifiedFiles);
   if (!invalidFilesList.length) {
     return;
@@ -59,7 +59,7 @@ const verifyModifiedFiles = modifiedFiles => {
   throw new Error(messages.verificationFailed());
 };
 
-module.exports = verifyModifiedFiles;
+module.exports = index;
 //
 // const ourFirstPRFiles = {
 //   'scripts/syncTS.sh': {

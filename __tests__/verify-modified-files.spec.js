@@ -1,4 +1,4 @@
-const didPropsChange = require('../src/props-change-checker');
+const didPropsChange = require('../src/verify-modified-files/props-change-checker');
 const fileContentMocks = require('../drivers/mocks/file-content-mocks');
 
 const { fileWithComponent, fileWithTwoComponents } = fileContentMocks;
