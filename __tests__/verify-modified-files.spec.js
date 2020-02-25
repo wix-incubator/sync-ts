@@ -3,7 +3,7 @@ const fileContentMocks = require('../drivers/mocks/file-content-mocks');
 
 const { fileWithComponent, fileWithTwoComponents } = fileContentMocks;
 
-describe('didPropsChange', () => {
+describe('verifyModifiedFiles', () => {
   it('should detect change for props addition', () => {
     const firstFile = fileWithComponent({
       propTypes: `prop1: PropTypes.number,
