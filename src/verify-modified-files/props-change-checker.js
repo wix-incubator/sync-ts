@@ -1,15 +1,15 @@
+const _ = require('lodash');
 const messages = require('./messages');
 const getAllComponentsDataByDisplayName = require('./get-all-components-data');
 const getInvalidIndices = require('./get-invalid-indices');
 
-const compAddedToFile = (sourceFileComponents, prFileComponents) =>
-  !sourceFileComponents && prFileComponents;
-const compDeletedFromFile = (sourceFileComponents, prFileComponents) =>
-  sourceFileComponents && !prFileComponents;
-const noComponentsInFile = (sourceFileComponents, prFileComponents) =>
-  !sourceFileComponents && !prFileComponents;
-const differentNumberOfComponents = (sourceFileComponents, prFileComponents) =>
-  sourceFileComponents.length !== prFileComponents.length;
+const componentChecker = (sourceFileComponents, prFileComponents) => ({
+  compAddedToFile: !sourceFileComponents && prFileComponents,
+  compDeletedFromFile: sourceFileComponents && !prFileComponents,
+  noComponentsInFile: !sourceFileComponents && !prFileComponents,
+  differentNumberOfComponents:
+    _.get(sourceFileComponents, 'length') !== _.get(prFileComponents, 'length'),
+});
 
 const invalidIndicesChangeMessage = (
   prFileComponents,
@@ -30,26 +30,29 @@ const didPropsChange = (sourceFile, fileFromPr) => {
   const sourceFileComponents = getAllComponentsDataByDisplayName(sourceFile);
   const prFileComponents = getAllComponentsDataByDisplayName(fileFromPr);
 
-  if (compAddedToFile(sourceFileComponents, prFileComponents)) {
+  const compChecker = componentChecker(sourceFileComponents, prFileComponents);
+
+  if (compChecker.compAddedToFile) {
     return {
       changeDetected: true,
       changeMessage: messages.compAdded(),
     };
   }
-  if (compDeletedFromFile(sourceFileComponents, prFileComponents)) {
+  if (compChecker.compDeletedFromFile) {
     return {
       changeDetected: true,
       changeMessage: messages.compDeleted(),
     };
   }
-  if (noComponentsInFile(sourceFileComponents, prFileComponents)) {
+  if (compChecker.noComponentsInFile) {
     return {
       changeDetected: false,
     };
   }
-  if (differentNumberOfComponents(sourceFileComponents, prFileComponents)) {
+  if (compChecker.differentNumberOfComponents) {
     const changeMessage =
-      sourceFileComponents.length < prFileComponents.length
+      _.get(sourceFileComponents, 'length', 0) <
+      _.get(prFileComponents, 'length', 0)
         ? messages.compAdded()
         : messages.compDeleted();
     return {

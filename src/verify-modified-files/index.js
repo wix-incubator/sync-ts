@@ -1,5 +1,5 @@
 const _ = require(`lodash`);
-const didPropsChange = require(`./src/verify-modified-files/props-change-checker`);
+const didPropsChange = require(`./props-change-checker`);
 const messages = require('./messages');
 
 const getTypescriptDescriptorPath = fileRelativePath => {

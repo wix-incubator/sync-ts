@@ -1,7 +1,6 @@
 const startsWithSrc = path => path.startsWith('src/');
 
 const validFileExtension = path =>
-  // !path.match('regex for .spec.js, .unit.js, .driver.js, .scss, .css');
   !path.match('[.spec.js,.unit.js,.driver.js,.scss,.css,.md]$');
 
 const hasNoTypescriptDescriptor = allFilePaths => path => {
