@@ -1,7 +1,8 @@
+const irrelevantFileExtensionRegex = /(\.unit\.js|\.spec\.js|\.driver\.js|\.scss|\.css|\.md)$/g;
+
 const startsWithSrc = path => path.startsWith('src/');
 
-const validFileExtension = path =>
-  !path.match('[.spec.js,.unit.js,.driver.js,.scss,.css,.md]$');
+const validFileExtension = path => !path.match(irrelevantFileExtensionRegex);
 
 const hasNoTypescriptDescriptor = allFilePaths => path => {
   const typescriptDescriptorPath = getTypescriptDescriptorPath(path);
@@ -15,12 +16,10 @@ const getTypescriptDescriptorPath = fileRelativePath => {
 };
 
 const filterIrrelevantPaths = filePaths => {
-  return (
-    filePaths
-      .filter(startsWithSrc)
-      // .filter(validFileExtension)
-      .filter(hasNoTypescriptDescriptor(filePaths))
-  );
+  return filePaths
+    .filter(startsWithSrc)
+    .filter(validFileExtension)
+    .filter(hasNoTypescriptDescriptor(filePaths));
 };
 
 module.exports = filterIrrelevantPaths;
