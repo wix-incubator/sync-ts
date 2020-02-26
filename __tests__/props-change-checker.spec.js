@@ -63,7 +63,7 @@ describe('didPropsChange', () => {
   });
 
   it('should detect change when changing the exported component display name', () => {
-    const firstFile = fileWithComponent();
+    const firstFile = fileWithComponent({ displayName: `'myComp'` });
     const secondFile = fileWithComponent({ displayName: `'myNewComp'` });
 
     expect(didPropsChange(firstFile, secondFile)).toMatchObject({

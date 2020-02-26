@@ -1,12 +1,5 @@
-const _ = require(`lodash`);
 const didPropsChange = require(`./props-change-checker`);
 const messages = require('./messages');
-
-const getTypescriptDescriptorPath = fileRelativePath => {
-  const lastSlashIndex = fileRelativePath.lastIndexOf(`/`);
-  const fileFolderPath = fileRelativePath.substring(0, lastSlashIndex + 1);
-  return `${fileFolderPath}index.d.ts`;
-};
 
 const getFilesWithModifiedProps = modifiedFiles => {
   const filesWithModifiedProps = [];
@@ -30,19 +23,8 @@ const getFilesWithModifiedProps = modifiedFiles => {
   return filesWithModifiedProps;
 };
 
-const getInvalidFiles = modifiedFiles => {
-  const filesWithModifiedProps = getFilesWithModifiedProps(modifiedFiles);
-
-  return _.filter(filesWithModifiedProps, file => {
-    const typescriptDescriptorRelativePath = getTypescriptDescriptorPath(
-      file.fileRelativePath,
-    );
-    return !modifiedFiles[typescriptDescriptorRelativePath];
-  });
-};
-
 const index = modifiedFiles => {
-  const invalidFilesList = getInvalidFiles(modifiedFiles);
+  const invalidFilesList = getFilesWithModifiedProps(modifiedFiles);
   if (!invalidFilesList.length) {
     return;
   }

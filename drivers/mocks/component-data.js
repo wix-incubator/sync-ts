@@ -1,33 +1,45 @@
 const _ = require('lodash');
 
-const baseComponentData = {
+const componentDataNoProps = {
   description: 'General component description.',
   displayName: 'MyComponent',
   methods: [],
 };
 
-const baseProp1 = {
-  prop1: {
+const propsMock = ({
+  baseType = 'number',
+  isRequired = false,
+  description = 'some-desc',
+  defaultValue = '123',
+} = {}) => ({
+  propsMock: {
     type: {
-      name: 'number',
+      name: baseType,
     },
-    required: false,
-    description: `Description of prop 'foo'.`,
+    required: isRequired,
+    description,
     defaultValue: {
-      value: '42',
+      value: defaultValue,
       computed: false,
     },
   },
-};
+});
 
-const baseProp2 = {
+const baseProps1 = propsMock({
+  baseType: 'number',
+  isRequired: false,
+  description: 'prop1 description',
+  defaultValue: '42',
+});
+
+const baseProps2 = {
   prop2: {
     type: {
       name: 'custom',
       raw: 'function(props, propName, componentName) {\n  // ...\n}',
     },
     required: false,
-    description: `Description of prop 'bar' (a custom validation function).`,
+    description: `Description of prop 'prop2' (a custom validation function).`,
     defaultValue: {
       value: '21',
       computed: false,
@@ -35,14 +47,34 @@ const baseProp2 = {
   },
 };
 
-const defaultProps = { ...baseProp1, ...baseProp2 };
+const propWithUnionType = partialType => ({
+  myProp: {
+    type: {
+      name: 'union',
+      value: [
+        {
+          name: partialType,
+        },
+        {
+          name: 'string',
+        },
+      ],
+    },
+    required: true,
+    description: '',
+  },
+});
 
-const componentData = (props = defaultProps) =>
-  _.assign({}, baseComponentData, { props });
+const defaultProps = { ...baseProps1, ...baseProps2 };
+
+const componentDataMock = (props = defaultProps) =>
+  _.assign({}, componentDataNoProps, { props });
 
 module.exports = {
-  baseComponentData,
-  baseProp1,
-  baseProp2,
-  componentData,
-}
+  componentDataNoProps,
+  baseProps1,
+  baseProps2,
+  propsMock,
+  propWithUnionType,
+  componentDataMock,
+};
