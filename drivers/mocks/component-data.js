@@ -1,15 +1,13 @@
-const _ = require('lodash')
+const _ = require('lodash');
 
 const baseComponentData = {
   description: 'General component description.',
   displayName: 'MyComponent',
   methods: [],
-}
+};
 
-const componentData = (props = defaultProps) => _.assign({}, baseComponentData, {props})
-
-const defaultProps = {
-  foo: {
+const baseProp1 = {
+  prop1: {
     type: {
       name: 'number',
     },
@@ -20,7 +18,10 @@ const defaultProps = {
       computed: false,
     },
   },
-  bar: {
+};
+
+const baseProp2 = {
+  prop2: {
     type: {
       name: 'custom',
       raw: 'function(props, propName, componentName) {\n  // ...\n}',
@@ -33,3 +34,15 @@ const defaultProps = {
     },
   },
 };
+
+const defaultProps = { ...baseProp1, ...baseProp2 };
+
+const componentData = (props = defaultProps) =>
+  _.assign({}, baseComponentData, { props });
+
+module.exports = {
+  baseComponentData,
+  baseProp1,
+  baseProp2,
+  componentData,
+}
