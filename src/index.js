@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const getModifiedFiles = require('./get-modified-files');
 const verifyModifiedFiles = require('./verify-modified-files');
 

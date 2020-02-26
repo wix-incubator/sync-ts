@@ -62,5 +62,8 @@
   "dependencies": {
     "lodash": "^4.17.15",
     "react-docgen": "^5.2.1"
+  },
+  "bin": {
+    "sync-ts": "dist/src/index.js"
   }
 }
