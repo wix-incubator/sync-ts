@@ -2,7 +2,7 @@ const irrelevantFileExtensionRegex = /(\.unit\.js|\.spec\.js|\.driver\.js|\.scss
 
 const startsWithSrc = path => path.startsWith('src/');
 
-const validFileExtension = path => !path.match(irrelevantFileExtensionRegex);
+const validFileExtension = path => !irrelevantFileExtensionRegex.test(path);
 
 const hasNoTypescriptDescriptor = allFilePaths => path => {
   const typescriptDescriptorPath = getTypescriptDescriptorPath(path);
