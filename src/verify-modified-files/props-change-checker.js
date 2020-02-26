@@ -18,9 +18,9 @@ const invalidIndicesChangeMessage = (
   let changeMessage = '';
   invalidComponentIndices.forEach(
     index =>
-      (changeMessage += `\t${messages.propsChanged(
+      (changeMessage += `${messages.propsChanged(
         prFileComponents[index].displayName,
-      )}\n`),
+      )}`),
   );
 
   return changeMessage;
