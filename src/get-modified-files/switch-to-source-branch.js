@@ -7,7 +7,10 @@ const switchToSourceBranch = (sourceBranch = 'master') => {
         async: true,
         silent: true,
       })
-      .on('exit', code => (code !== 0 ? resolve(false) : resolve(true)));
+      .on('exit', handleException);
+    function handleException(code) {
+      return code !== 0 ? resolve(false) : resolve(true);
+    }
   });
 };
 
