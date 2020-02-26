@@ -1,8 +1,8 @@
-export const mockExec = ({ mockFile, exitCode = 0 } = {}) => () => ({
+export const mockExec = ({ mockData, exitCode = 0 } = {}) => () => ({
   stdout: {
     on: (eventName, handler) => {
       if (eventName === 'data') {
-        handler(mockFile);
+        handler(mockData);
       }
     },
   },

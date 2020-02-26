@@ -2,8 +2,8 @@ import shell from 'shelljs';
 import getModifiedFilePaths from '../src/get-modified-files/get-modified-file-paths';
 import { mockExec } from '../drivers/mocks/shellJS';
 
-describe('get modified file paths function', () => {
-  const mockData = '/test-file.js';
+describe('get git root path function', () => {
+  const mockData = '/git-root-path';
   let execSpy;
 
   beforeEach(() => {
@@ -15,7 +15,7 @@ describe('get modified file paths function', () => {
     execSpy.mockClear();
   });
 
-  it('should get paths for modified files', async () => {
+  it('should return git root path', async () => {
     const filePaths = await getModifiedFilePaths();
     expect(execSpy).toHaveBeenCalled();
     expect(filePaths.length).toBe(1);
