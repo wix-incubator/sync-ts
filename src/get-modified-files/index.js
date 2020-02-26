@@ -16,7 +16,7 @@ async function getModifiedFiles(sourceBranch = 'master') {
       const files = await resolveFiles(filesFromPr, filesFromSourceBranch);
       resolve(files);
     } else {
-      reject(new Error('cannot switch to master')); // export to errors file
+      reject(new Error(`cannot switch to ${sourceBranch}`)); // export to errors file
     }
   });
 }
