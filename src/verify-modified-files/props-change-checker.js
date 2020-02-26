@@ -18,12 +18,12 @@ const invalidIndicesChangeMessage = (
   let changeMessage = '';
   invalidComponentIndices.forEach(
     index =>
-      (changeMessage += `${messages.propsChanged(
+      (changeMessage += `\t${messages.propsChanged(
         prFileComponents[index].displayName,
       )}\n`),
   );
 
-  return changeMessage.trim();
+  return changeMessage;
 };
 
 const didPropsChange = (sourceFile, fileFromPr) => {
