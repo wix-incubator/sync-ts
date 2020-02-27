@@ -13,6 +13,7 @@ const getFilesContent = async (filePaths = []) =>
 async function getFileContent(filePath) {
   return new Promise(async resolve => {
     const gitRootPath = await getGitRootPath();
+    console.log('### cwd', process.cwd());
     console.log('### gitRootPath', gitRootPath);
     fs.readFile(`${gitRootPath}/${filePath}`, 'utf8', (err, data) => {
       if (!err) {
