@@ -1,9 +1,9 @@
 const shell = require('shelljs');
 
-const switchToSourceBranch = (sourceBranch = 'master') => {
+const switchToBranch = (branch = 'master') => {
   return new Promise(resolve => {
     shell
-      .exec(`git checkout ${sourceBranch}`, {
+      .exec(`git checkout ${branch}`, {
         async: true,
         silent: true,
       })
@@ -14,4 +14,4 @@ const switchToSourceBranch = (sourceBranch = 'master') => {
   });
 };
 
-module.exports = switchToSourceBranch;
+module.exports = switchToBranch;
