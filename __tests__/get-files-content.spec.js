@@ -1,34 +1,30 @@
-import fs from 'fs';
+const mockFs = require('mock-fs');
+
 import getFilesContent from '../src/get-modified-files/get-files-content';
 
 describe('get files content function', () => {
-  let readFileSpy;
-  const mockReadFile = (url, encoding, cb) => cb(null, mockFileContent);
-  const mockFilePaths = ['/test-file.js'];
+  const mockFilePath = '/test-file.js';
   const mockFileContent = 'some content';
 
   beforeEach(() => {
-    readFileSpy = jest.spyOn(fs, 'readFile');
-    readFileSpy.mockImplementation(mockReadFile);
+    mockFs({
+      mockFilePath: mockFileContent,
+    });
   });
 
   afterEach(() => {
-    readFileSpy.mockClear();
+    mockFs.restore();
   });
 
   it('should get paths for modified files', async () => {
-    const expected = [
-      { relativePath: '/test-file.js', content: 'some content' },
-    ];
+    const expected = [{ relativePath: mockFilePath, content: mockFileContent }];
 
-    await expect(getFilesContent(mockFilePaths)).resolves.toEqual(expected);
-    expect(readFileSpy).toHaveBeenCalled();
+    await expect(getFilesContent([mockFilePath])).resolves.toEqual(expected);
   });
 
   it('should return empty array if no files exist', async () => {
     const expected = [];
 
     await expect(getFilesContent()).resolves.toEqual(expected);
-    expect(readFileSpy).not.toHaveBeenCalled();
   });
 });
