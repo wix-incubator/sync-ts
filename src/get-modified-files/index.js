@@ -3,6 +3,7 @@ const filterIrrelevantPaths = require('./filter-irrelevant-paths');
 const getFilesContent = require('./get-files-content');
 const switchToSourceBranch = require('./switch-to-source-branch');
 const resolveFiles = require('./resolve-files');
+const errorMessages = require('../utils/error-messages');
 
 async function getModifiedFiles(sourceBranch = 'master') {
   return new Promise(async (resolve, reject) => {
@@ -16,7 +17,7 @@ async function getModifiedFiles(sourceBranch = 'master') {
       const files = await resolveFiles(filesFromPr, filesFromSourceBranch);
       resolve(files);
     } else {
-      reject(new Error(`cannot switch to ${sourceBranch}`)); // export to errors file
+      reject(new Error(errorMessages.branchChangeFailed(sourceBranch)));
     }
   });
 }

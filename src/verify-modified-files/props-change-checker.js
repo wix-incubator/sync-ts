@@ -1,5 +1,5 @@
 const _ = require('lodash');
-const messages = require('./messages');
+const errorMessages = require('../utils/error-messages');
 const getAllComponentsDataByDisplayName = require('./get-all-components-data');
 const getInvalidIndices = require('./get-invalid-indices');
 
@@ -18,7 +18,7 @@ const invalidIndicesChangeMessage = (
   let changeMessage = '';
   invalidComponentIndices.forEach(
     index =>
-      (changeMessage += `${messages.propsChanged(
+      (changeMessage += `${errorMessages.propsChanged(
         prFileComponents[index].displayName,
       )}`),
   );
@@ -35,13 +35,13 @@ const didPropsChange = (sourceFile, fileFromPr) => {
   if (compChecker.compAddedToFile) {
     return {
       changeDetected: true,
-      changeMessage: messages.compAdded(),
+      changeMessage: errorMessages.compAdded(),
     };
   }
   if (compChecker.compDeletedFromFile) {
     return {
       changeDetected: true,
-      changeMessage: messages.compDeleted(),
+      changeMessage: errorMessages.compDeleted(),
     };
   }
   if (compChecker.noComponentsInFile) {
@@ -53,8 +53,8 @@ const didPropsChange = (sourceFile, fileFromPr) => {
     const changeMessage =
       _.get(sourceFileComponents, 'length', 0) <
       _.get(prFileComponents, 'length', 0)
-        ? messages.compAdded()
-        : messages.compDeleted();
+        ? errorMessages.compAdded()
+        : errorMessages.compDeleted();
     return {
       changeDetected: true,
       changeMessage,

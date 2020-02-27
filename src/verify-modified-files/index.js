@@ -1,5 +1,5 @@
 const didPropsChange = require(`./props-change-checker`);
-const messages = require('./messages');
+const errorMessages = require('../utils/error-messages');
 
 const getFilesWithModifiedProps = modifiedFiles => {
   const filesWithModifiedProps = [];
@@ -31,14 +31,14 @@ const index = modifiedFiles => {
 
   invalidFilesList.forEach(invalidFile => {
     console.error(
-      messages.fileChanged(
+      errorMessages.fileChanged(
         invalidFile.fileRelativePath,
         invalidFile.changeMessage,
       ),
     );
   });
 
-  throw new Error(messages.verificationFailed());
+  throw new Error(errorMessages.verificationFailed());
 };
 
 module.exports = index;
