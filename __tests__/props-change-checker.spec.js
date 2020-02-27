@@ -1,6 +1,6 @@
 const didPropsChange = require('../src/verify-modified-files/props-change-checker');
 const fileContentMocks = require('../drivers/mocks/file-content-mocks');
-const messages = require('../src/verify-modified-files/messages')
+const errorMessages = require('../src/utils/error-messages');
 
 const { fileWithComponent, fileWithTwoComponents } = fileContentMocks;
 
@@ -17,7 +17,7 @@ describe('didPropsChange', () => {
 
     expect(didPropsChange(firstFile, secondFile)).toMatchObject({
       changeDetected: true,
-      changeMessage: messages.propsChanged('DummyComponent'),
+      changeMessage: errorMessages.propsChanged('DummyComponent'),
     });
   });
 
@@ -32,7 +32,7 @@ describe('didPropsChange', () => {
 
     expect(didPropsChange(firstFile, secondFile)).toMatchObject({
       changeDetected: true,
-      changeMessage: messages.propsChanged('DummyComponent'),
+      changeMessage: errorMessages.propsChanged('DummyComponent'),
     });
   });
 
@@ -46,7 +46,7 @@ describe('didPropsChange', () => {
 
     expect(didPropsChange(firstFile, secondFile)).toMatchObject({
       changeDetected: true,
-      changeMessage: messages.compAdded(),
+      changeMessage: errorMessages.compAdded(),
     });
   });
 
@@ -59,7 +59,7 @@ describe('didPropsChange', () => {
 
     expect(didPropsChange(firstFile, secondFile)).toMatchObject({
       changeDetected: true,
-      changeMessage: messages.compDeleted(),
+      changeMessage: errorMessages.compDeleted(),
     });
   });
 
@@ -69,7 +69,7 @@ describe('didPropsChange', () => {
 
     expect(didPropsChange(firstFile, secondFile)).toMatchObject({
       changeDetected: true,
-      changeMessage: messages.propsChanged('myNewComp'),
+      changeMessage: errorMessages.propsChanged('myNewComp'),
     });
   });
 
@@ -114,7 +114,7 @@ describe('didPropsChange', () => {
 
       expect(didPropsChange(firstFile, secondFile)).toMatchObject({
         changeDetected: true,
-        changeMessage: messages.propsChanged('Comp1'),
+        changeMessage: errorMessages.propsChanged('Comp1'),
       });
     });
 
@@ -128,7 +128,7 @@ describe('didPropsChange', () => {
 
       expect(didPropsChange(firstFile, secondFile)).toMatchObject({
         changeDetected: true,
-        changeMessage: messages.propsChanged('Comp2'),
+        changeMessage: errorMessages.propsChanged('Comp2'),
       });
     });
   });

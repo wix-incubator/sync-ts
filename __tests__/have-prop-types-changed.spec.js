@@ -52,7 +52,7 @@ describe('havePropTypesChanged', () => {
       propsMock({ baseType: 'string', defaultValue: 'target' }),
     );
 
-    expect(havePropTypesChanged(sourceComp, prComp)).toBe(false)
+    expect(havePropTypesChanged(sourceComp, prComp)).toBe(false);
   });
 
   it('should return false for prop description changes', () => {
@@ -63,7 +63,7 @@ describe('havePropTypesChanged', () => {
       propsMock({ baseType: 'string', description: 'target' }),
     );
 
-    expect(havePropTypesChanged(sourceComp, prComp)).toBe(false)
+    expect(havePropTypesChanged(sourceComp, prComp)).toBe(false);
   });
 
   it('should return true for prop required change', () => {
@@ -74,6 +74,6 @@ describe('havePropTypesChanged', () => {
       propsMock({ baseType: 'string', isRequired: false }),
     );
 
-    expect(havePropTypesChanged(sourceComp, prComp)).toBe(true)
+    expect(havePropTypesChanged(sourceComp, prComp)).toBe(true);
   });
 });
