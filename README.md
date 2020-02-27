@@ -5,26 +5,28 @@ A package for syncing prop types with Typescript types
 ## Install
 
 ```shell
-npm i
+$ npm i
 ```
 
 ## Test
 
 ```shell
-npm run test
+$ npm run test
 ```
 
 ## Run
 
 ```shell
-npx sync-ts
+$ npx sync-ts
 ```
 ## Optional Flags
 **sourceBranch**: *string* - source branch to compare PR with. `default: master`  
 **skip**: *boolean* - optional escape hatch. `default: false`  
 
-Usage example: `sourceBranch='my-branch' skip=true sync-ts`
-
+Usage example: 
+```shell
+$ sourceBranch='my-branch' skip=true npx sync-ts
+```
 ## Consume in CI
 1. Add script into npm scripts inside `package.json`
 2. Submit a PR and wait for build to run in CI
