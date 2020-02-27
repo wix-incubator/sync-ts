@@ -3,7 +3,7 @@ const shell = require('shelljs');
 const getCurrentBranch = () => {
   return new Promise(resolve => {
     shell
-      .exec(`git branch`, {
+      .exec(`git rev-parse --abbrev-ref HEAD`, {
         async: true,
         silent: true,
       })
