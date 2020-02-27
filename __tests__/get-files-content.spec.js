@@ -18,13 +18,13 @@ describe('get files content function', () => {
 
   it('should get paths for modified files', async () => {
     const expected = [{ relativePath: mockFilePath, content: mockFileContent }];
-
-    await expect(getFilesContent([mockFilePath])).resolves.toEqual(expected);
+    const filesContent = await getFilesContent([mockFilePath]);
+    expect(filesContent).toEqual(expected);
   });
 
   it('should return empty array if no files exist', async () => {
     const expected = [];
-
-    await expect(getFilesContent()).resolves.toEqual(expected);
+    const filesContent = await getFilesContent();
+    expect(filesContent).toEqual(expected);
   });
 });
