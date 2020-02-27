@@ -20,8 +20,10 @@ npm run test
 npx sync-ts
 ```
 ## Optional Flags
-**sourceBranch**: *string* - source branch to compare PR with. `default: master`
-**skip**: *boolean* - optional escape hatch. `default: false`
+**sourceBranch**: *string* - source branch to compare PR with. `default: master`  
+**skip**: *boolean* - optional escape hatch. `default: false`  
+
+Usage example: `sourceBranch='my-branch' skip=true sync-ts`
 
 ## Consume in CI
 1. Add script into npm scripts inside `package.json`
