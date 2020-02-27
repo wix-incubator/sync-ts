@@ -5,7 +5,7 @@ A package for syncing prop types with Typescript types
 ## Install
 
 ```shell
-$ npm i
+$ npm i -SD
 ```
 
 ## Test
@@ -26,6 +26,17 @@ $ npx sync-ts
 Usage example: 
 ```shell
 $ sourceBranch='my-branch' skip=true npx sync-ts
+```
+## Add tool as a pre-push hook using [husky](https://github.com/typicode/husky)
+```shell
+// package.json
+{
+  "husky": {
+    "hooks": {
+      "pre-push": "sync-ts",
+    }
+  }
+}
 ```
 ## Consume in CI
 1. Add script into npm scripts inside `package.json`
