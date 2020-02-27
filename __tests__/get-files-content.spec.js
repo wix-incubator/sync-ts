@@ -4,7 +4,7 @@ import shell from 'shelljs';
 import getFilesContent from '../src/get-modified-files/get-files-content';
 import { mockExec } from '../drivers/mocks/shellJS';
 
-describe.skip('get files content function', () => {
+describe('get files content function', () => {
   const mockFilePath = '/test-file.js';
   const mockFileContent = 'some content';
   let execSpy;
@@ -14,7 +14,7 @@ describe.skip('get files content function', () => {
       mockFilePath: mockFileContent,
     });
     execSpy = jest.spyOn(shell, 'exec');
-    execSpy.mockImplementation(mockExec({ mockData: './' }));
+    execSpy.mockImplementation(mockExec({ mockData: '.' }));
   });
 
   afterEach(() => {
