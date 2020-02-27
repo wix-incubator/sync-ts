@@ -3,34 +3,38 @@ const errorMessages = require('../utils/error-messages');
 const getAllComponentsDataByDisplayName = require('./get-all-components-data');
 const getInvalidIndices = require('./get-invalid-indices');
 
-const componentChecker = (sourceFileComponents, prFileComponents) => ({
-  compAddedToFile: !sourceFileComponents && prFileComponents,
-  compDeletedFromFile: sourceFileComponents && !prFileComponents,
-  noComponentsInFile: !sourceFileComponents && !prFileComponents,
+const componentChecker = (sourceFileComponents, targetFileComponents) => ({
+  compAddedToFile: !sourceFileComponents && targetFileComponents,
+  compDeletedFromFile: sourceFileComponents && !targetFileComponents,
+  noComponentsInFile: !sourceFileComponents && !targetFileComponents,
   differentNumberOfComponents:
-    _.get(sourceFileComponents, 'length') !== _.get(prFileComponents, 'length'),
+    _.get(sourceFileComponents, 'length') !==
+    _.get(targetFileComponents, 'length'),
 });
 
 const invalidIndicesChangeMessage = (
-  prFileComponents,
+  targetFileComponents,
   invalidComponentIndices,
 ) => {
   let changeMessage = '';
   invalidComponentIndices.forEach(
     index =>
       (changeMessage += `${errorMessages.propsChanged(
-        prFileComponents[index].displayName,
+        targetFileComponents[index].displayName,
       )}`),
   );
 
   return changeMessage;
 };
 
-const didPropsChange = (sourceFile, fileFromPr) => {
+const didPropsChange = (sourceFile, targetFile) => {
   const sourceFileComponents = getAllComponentsDataByDisplayName(sourceFile);
-  const prFileComponents = getAllComponentsDataByDisplayName(fileFromPr);
+  const targetFileComponents = getAllComponentsDataByDisplayName(targetFile);
 
-  const compChecker = componentChecker(sourceFileComponents, prFileComponents);
+  const compChecker = componentChecker(
+    sourceFileComponents,
+    targetFileComponents,
+  );
 
   if (compChecker.compAddedToFile) {
     return {
@@ -52,7 +56,7 @@ const didPropsChange = (sourceFile, fileFromPr) => {
   if (compChecker.differentNumberOfComponents) {
     const changeMessage =
       _.get(sourceFileComponents, 'length', 0) <
-      _.get(prFileComponents, 'length', 0)
+      _.get(targetFileComponents, 'length', 0)
         ? errorMessages.compAdded()
         : errorMessages.compDeleted();
     return {
@@ -62,7 +66,7 @@ const didPropsChange = (sourceFile, fileFromPr) => {
   }
 
   const invalidComponentIndices = getInvalidIndices(
-    prFileComponents,
+    targetFileComponents,
     sourceFileComponents,
   );
 
@@ -70,7 +74,7 @@ const didPropsChange = (sourceFile, fileFromPr) => {
     ? {
         changeDetected: true,
         changeMessage: invalidIndicesChangeMessage(
-          prFileComponents,
+          targetFileComponents,
           invalidComponentIndices,
         ),
       }

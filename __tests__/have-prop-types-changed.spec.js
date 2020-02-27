@@ -49,7 +49,7 @@ describe('havePropTypesChanged', () => {
       propsMock({ baseType: 'string', defaultValue: 'source' }),
     );
     const prComp = componentDataMock(
-      propsMock({ baseType: 'string', defaultValue: 'pr' }),
+      propsMock({ baseType: 'string', defaultValue: 'target' }),
     );
 
     expect(havePropTypesChanged(sourceComp, prComp)).toBe(false)
@@ -60,7 +60,7 @@ describe('havePropTypesChanged', () => {
       propsMock({ baseType: 'string', description: 'source' }),
     );
     const prComp = componentDataMock(
-      propsMock({ baseType: 'string', description: 'pr' }),
+      propsMock({ baseType: 'string', description: 'target' }),
     );
 
     expect(havePropTypesChanged(sourceComp, prComp)).toBe(false)

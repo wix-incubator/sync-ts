@@ -5,12 +5,12 @@ const getFilesWithModifiedProps = modifiedFiles => {
   const filesWithModifiedProps = [];
 
   Object.keys(modifiedFiles).forEach(fileRelativePath => {
-    const { contentFromSourceBranch, contentFromPr } = modifiedFiles[
+    const { contentFromSourceBranch, contentFromTargetBranch } = modifiedFiles[
       fileRelativePath
     ];
     const { changeDetected, changeMessage } = didPropsChange(
       contentFromSourceBranch,
-      contentFromPr,
+      contentFromTargetBranch,
     );
     if (changeDetected) {
       filesWithModifiedProps.push({

@@ -1,11 +1,11 @@
 const _ = require('lodash');
 
-const havePropTypesChanged = (sourceFileComponentData, prFileComponentData) => {
+const havePropTypesChanged = (sourceFileComponentData, targetFileComponentData) => {
   const sourceComponentPropTypes = _.mapValues(
     sourceFileComponentData.props,
     props => _.pick(props, ['type', 'required']),
   );
-  const prComponentPropTypes = _.mapValues(prFileComponentData.props, props =>
+  const prComponentPropTypes = _.mapValues(targetFileComponentData.props, props =>
     _.pick(props, ['type', 'required']),
   );
 

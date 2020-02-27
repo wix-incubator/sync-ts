@@ -1,17 +1,17 @@
 const _ = require('lodash');
 const havePropTypesChanged = require('./have-prop-types-changed');
 
-const getInvalidIndices = (prFileComponents, sourceFileComponents) => {
+const getInvalidIndices = (targetFileComponents, sourceFileComponents) => {
   const invalidComponentIndices = [];
 
-  prFileComponents.forEach((prFileComponent, index) => {
+  targetFileComponents.forEach((targetFileComponent, index) => {
     const sourceFileComponent = sourceFileComponents[index];
     if (
       !_.isEqual(
         sourceFileComponent.displayName,
-        prFileComponent.displayName,
+        targetFileComponent.displayName,
       ) ||
-      havePropTypesChanged(sourceFileComponent, prFileComponent)
+      havePropTypesChanged(sourceFileComponent, targetFileComponent)
     ) {
       invalidComponentIndices.push(index);
     }
