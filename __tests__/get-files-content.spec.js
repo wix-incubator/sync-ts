@@ -1,7 +1,7 @@
 import fs from 'fs';
 import getFilesContent from '../src/get-modified-files/get-files-content';
 
-describe.skip('get files content function', () => {
+describe('get files content function', () => {
   let readFileSpy;
   const mockReadFile = (url, encoding, cb) => cb(null, mockFileContent);
   const mockFilePaths = ['/test-file.js'];
