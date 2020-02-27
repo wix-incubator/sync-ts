@@ -1,5 +1,5 @@
 import shell from 'shelljs';
-import switchToSourceBranch from '../src/get-modified-files/switch-to-source-branch';
+import switchToSourceBranch from '../src/get-modified-files/switch-to-branch';
 import { mockExec } from '../drivers/mocks/shellJS';
 
 describe('switch to source branch function', () => {
