@@ -4,7 +4,7 @@ import shell from 'shelljs';
 import getFilesContent from '../src/get-modified-files/get-files-content';
 import { mockExec } from '../drivers/mocks/shellJS';
 
-describe('get files content function', () => {
+describe.skip('get files content function', () => {
   const mockFilePath = '/test-file.js';
   const mockFileContent = 'some content';
   let execSpy;
