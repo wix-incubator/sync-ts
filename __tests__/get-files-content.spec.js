@@ -14,7 +14,7 @@ describe('get files content function', () => {
       mockFilePath: mockFileContent,
     });
     execSpy = jest.spyOn(shell, 'exec');
-    execSpy.mockImplementation(mockExec({ mockData: './' }));
+    execSpy.mockImplementation(mockExec({ mockData: '../' }));
   });
 
   afterEach(() => {
