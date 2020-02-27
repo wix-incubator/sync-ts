@@ -5,7 +5,7 @@ A package for syncing prop types with Typescript types
 ## Install
 
 ```shell
-$ npm i -SD
+$ npm i -D
 ```
 
 ## Test
