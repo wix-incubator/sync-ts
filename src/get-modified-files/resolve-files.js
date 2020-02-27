@@ -1,12 +1,14 @@
-const resolveFiles = (prFiles = [], sourceBranchFiles = []) => {
-  if (!prFiles || !sourceBranchFiles) {
+const resolveFiles = (targetBranchFiles = [], sourceBranchFiles = []) => {
+  if (!targetBranchFiles || !sourceBranchFiles) {
     return {};
   }
-  const filePaths = prFiles.map(prFile => prFile.relativePath);
+  const filePaths = targetBranchFiles.map(
+    targetBranchFile => targetBranchFile.relativePath,
+  );
   const resolvedFiles = filePaths.reduce((files, currFilePath) => {
     const file = {
       [currFilePath]: {
-        contentFromPr: getFileContent(prFiles, currFilePath),
+        contentFromPr: getFileContent(targetBranchFiles, currFilePath),
         contentFromSourceBranch: getFileContent(
           sourceBranchFiles,
           currFilePath,
