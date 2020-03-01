@@ -21,15 +21,15 @@ describe('resolve files function', () => {
     ];
     const expected = {
       '/file.js': {
-        contentFromPr: 'some content',
+        contentFromTargetBranch: 'some content',
         contentFromSourceBranch: 'some other content',
       },
       '/new-file.js': {
-        contentFromPr: 'new content',
+        contentFromTargetBranch: 'new content',
         contentFromSourceBranch: '',
       },
       '/deleted-file.js': {
-        contentFromPr: '',
+        contentFromTargetBranch: '',
         contentFromSourceBranch: 'deleted content',
       },
     };
