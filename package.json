@@ -14,7 +14,7 @@
   ],
   "unpkg": true,
   "publishConfig": {
-    "registry": "http://npm.dev.wixpress.com/"
+    "registry": "https://registry.npmjs.org/"
   },
   "private": false,
   "scripts": {
