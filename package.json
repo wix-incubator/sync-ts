@@ -1,7 +1,7 @@
 {
   "name": "sync-ts",
   "version": "1.0.0",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "author": {
     "name": "Ziv Pizanti",
     "email": "zivp@wix.com"
