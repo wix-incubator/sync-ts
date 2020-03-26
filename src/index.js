@@ -5,6 +5,9 @@ const verifyModifiedFiles = require('./verify-modified-files');
 
 const { sourceBranch, excludePaths, skip = false } = process.env;
 (async () => {
+  console.log(
+    `sync-ts params: sourceBranch=${sourceBranch} excludePaths=${excludePaths} skip=${skip}`,
+  );
   if (skip) {
     console.info('sync-ts: all checks skipped.');
     process.exit(0);
