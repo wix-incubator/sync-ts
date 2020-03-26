@@ -3,15 +3,16 @@
 const getModifiedFiles = require('./get-modified-files');
 const verifyModifiedFiles = require('./verify-modified-files');
 
-const { sourceBranch, excludePaths, skip = false } = process.env;
+const { sourceBranch, excludePaths: excludePathsRaw, skip = false } = process.env;
 (async () => {
   console.log(
-    `sync-ts params: sourceBranch=${sourceBranch} excludePaths=${excludePaths} skip=${skip}`,
+    `sync-ts params: sourceBranch=${sourceBranch} excludePaths=${excludePathsRaw} skip=${skip}`,
   );
   if (skip) {
     console.info('sync-ts: all checks skipped.');
     process.exit(0);
   }
+  const excludePaths = excludePathsRaw ? excludePathsRaw.split(";") : [];
   try {
     const modifiedFiles = await getModifiedFiles(sourceBranch, excludePaths);
     verifyModifiedFiles(modifiedFiles);
