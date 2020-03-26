@@ -15,11 +15,23 @@ const getTypescriptDescriptorPath = fileRelativePath => {
   return `${fileFolderPath}index.d.ts`;
 };
 
-const filterIrrelevantPaths = filePaths => {
+const notInExcludePaths = (excludePaths = []) => path => {
+  if (excludePaths.length === 0) {
+    return true;
+  }
+  const pathIsExcluded = excludePaths.some(excludePath => {
+    const pattern = new RegExp(excludePath);
+    return pattern.test(path);
+  });
+  return !pathIsExcluded;
+};
+
+const filterIrrelevantPaths = (filePaths, excludePaths) => {
   return filePaths
     .filter(startsWithSrc)
     .filter(validFileExtension)
-    .filter(hasNoTypescriptDescriptor(filePaths));
+    .filter(hasNoTypescriptDescriptor(filePaths))
+    .filter(notInExcludePaths(excludePaths));
 };
 
 module.exports = filterIrrelevantPaths;

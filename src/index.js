@@ -3,14 +3,14 @@
 const getModifiedFiles = require('./get-modified-files');
 const verifyModifiedFiles = require('./verify-modified-files');
 
-const { sourceBranch, skip = false } = process.env;
+const { sourceBranch, excludePaths, skip = false } = process.env;
 (async () => {
   if (skip) {
     console.info('sync-ts: all checks skipped.');
     process.exit(0);
   }
   try {
-    const modifiedFiles = await getModifiedFiles(sourceBranch);
+    const modifiedFiles = await getModifiedFiles(sourceBranch, excludePaths);
     verifyModifiedFiles(modifiedFiles);
     console.info('sync-ts: all checks passed.');
     process.exit(0);

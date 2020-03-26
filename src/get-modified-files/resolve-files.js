@@ -8,7 +8,10 @@ const resolveFiles = (targetBranchFiles = [], sourceBranchFiles = []) => {
   const resolvedFiles = filePaths.reduce((files, currFilePath) => {
     const file = {
       [currFilePath]: {
-        contentFromTargetBranch: getFileContent(targetBranchFiles, currFilePath),
+        contentFromTargetBranch: getFileContent(
+          targetBranchFiles,
+          currFilePath,
+        ),
         contentFromSourceBranch: getFileContent(
           sourceBranchFiles,
           currFilePath,
