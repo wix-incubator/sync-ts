@@ -62,6 +62,7 @@
   },
   "dependencies": {
     "lodash": "^4.17.15",
+    "minimist": "^1.2.5",
     "react-docgen": "^5.2.1"
   },
   "bin": {

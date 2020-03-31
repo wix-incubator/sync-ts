@@ -6,10 +6,10 @@ const getCurrentBranch = require('./get-current-branch');
 const resolveFiles = require('./resolve-files');
 const errorMessages = require('../utils/error-messages');
 
-async function getModifiedFiles(sourceBranch = 'master') {
+async function getModifiedFiles(sourceBranch = 'master', excludePaths) {
   return new Promise(async (resolve, reject) => {
     const rawFilePaths = await getModifiedFilePaths(sourceBranch);
-    const filePaths = filterIrrelevantPaths(rawFilePaths);
+    const filePaths = filterIrrelevantPaths(rawFilePaths, excludePaths);
     const filesFromPr = await getFilesContent(filePaths);
     const targetBranch = await getCurrentBranch();
     const isSwitchSuccessful = await switchToBranch(sourceBranch);

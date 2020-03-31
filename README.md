@@ -20,12 +20,19 @@ $ npm run test
 $ npx sync-ts
 ```
 ## Optional Flags
-**sourceBranch**: *string* - source branch to compare PR with. `default: master`  
-**skip**: *boolean* - optional escape hatch. `default: false`  
+**--sourceBranch**: *string* - source branch to compare PR with. `default: master`
 
-Usage example: 
+**--excludePath**: *string* - paths to exclude
+    
+**--skip**: *boolean* - optional escape hatch. `default: false`  
+
+Usage examples: 
 ```shell
-$ sourceBranch='my-branch' skip=true npx sync-ts
+$ npx sync-ts
+
+$ npx sync-ts --sourceBranch='my-branch' 
+
+$ npx sync-ts --sourceBranch='my-branch' --excludePath='src/.*/docs/.*' --excludePath='src/.*/examples/.*'
 ```
 ## Add tool as a pre-push hook using [husky](https://github.com/typicode/husky)
 ```shell
