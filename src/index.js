@@ -5,17 +5,17 @@ const verifyModifiedFiles = require('./verify-modified-files');
 
 (async () => {
   const args = minimist(process.argv.slice(2), {
-    string: ['sourceBranch', 'excludePaths'],
+    string: ['sourceBranch', 'excludePath'],
     boolean: ['skip'],
   });
   const { sourceBranch, skip = false } = args;
-  const excludePaths = Array.isArray(args.excludePaths)
-    ? args.excludePaths
-    : (args.excludePaths
-    ? [args.excludePaths]
-    : []);
+  const listOfPathsToExclude = Array.isArray(args.excludePath)
+    ? args.excludePath
+    : args.excludePath
+    ? [args.excludePath]
+    : [];
   console.info(
-    `sync-ts params: sourceBranch=${sourceBranch} excludePaths=${excludePaths} skip=${skip}`,
+    `sync-ts params: sourceBranch=${sourceBranch} excludePaths=${listOfPathsToExclude} skip=${skip}`,
   );
   if (skip) {
     console.info('sync-ts: all checks skipped.');
@@ -23,7 +23,10 @@ const verifyModifiedFiles = require('./verify-modified-files');
   }
 
   try {
-    const modifiedFiles = await getModifiedFiles(sourceBranch, excludePaths);
+    const modifiedFiles = await getModifiedFiles(
+      sourceBranch,
+      listOfPathsToExclude,
+    );
     verifyModifiedFiles(modifiedFiles);
     console.info('sync-ts: all checks passed.');
     process.exit(0);
