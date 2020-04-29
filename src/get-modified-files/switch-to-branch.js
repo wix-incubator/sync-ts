@@ -5,7 +5,7 @@ const switchToBranch = (branch = 'master') => {
     shell
       .exec(`git checkout ${branch}`, {
         async: true,
-        silent: true,
+        silent: false,
       })
       .on('exit', handleException);
     function handleException(code) {
