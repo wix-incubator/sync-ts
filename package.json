@@ -36,7 +36,7 @@
     "lint-staged": "^10.0.7",
     "mock-fs": "^4.11.0",
     "shelljs": "^0.8.3",
-    "yoshi": "^4.0.0"
+    "@wix/yoshi": "^4.0.0"
   },
   "jest": {
     "testPathIgnorePatterns": [
