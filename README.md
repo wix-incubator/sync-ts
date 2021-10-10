@@ -1,3 +1,6 @@
+# This package has been deprecated
+## Package no longer supported. Use at your own risk.
+
 # sync-ts
 A package for syncing prop types with Typescript types
 
